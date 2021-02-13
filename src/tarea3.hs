@@ -92,13 +92,11 @@ analizarArbolMB = plegarArbolMB transVacio transRamaM transRamaB
 -- Ejercicio 1
 fiboIndex :: Integer -> Maybe Integer;
 fiboIndex n
-  | n `elem` fibLista = Just $ toInteger $ 1 + length fibLista
+  | n `elem` fibLista = Just $ toInteger $ length fibLista
   | otherwise = Nothing 
     where 
-      fib 0 = 0
-      fib 1 = 1
-      fib n = fib (n-1) + fib (n-2)
-      fibLista = (takeWhile (<=n) (map fib [2..]))
+      fib = 1 : 1 : zipWith (+) fib (tail fib)
+		    fibLista = takeWhile (<=n) fib
 
 -- Definicion por ghci:
--- fiboIndex :: Integer -> Maybe Integer; fiboIndex n | n `elem` fibLista = Just $ toInteger $ 1 + length fibLista | otherwise = Nothing where fib 0 = 0; fib 1 = 1; fib n = fib (n-1) + fib (n-2); fibLista = (takeWhile (<=n) (map fib [2..]))
+-- fiboIndex :: Integer -> Maybe Integer; fiboIndex n | n `elem` fibLista = Just $ toInteger $ length fibLista | otherwise = Nothing where fib = 1 : 1 : zipWith (+) fib (tail fib); fibLista = takeWhile (<=n) fib
