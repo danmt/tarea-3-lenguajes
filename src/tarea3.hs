@@ -91,12 +91,11 @@ analizarArbolMB = plegarArbolMB transVacio transRamaM transRamaB
 -- siendo estos una lista y un arbol, respectivamente.
 
 -- i) Foldable es el typeclass incluido en el Preludio de Haskell que permite trabajar sobre estructuras de datos que pueden ser plegadas
-
 -- Definicion de la instancia Foldable para el tipo de datos ArbolMB siguiendo la definicion dada en el Preludio de Haskell
- instance Foldable ArbolMB where 
- 	foldMap f Vacio = mempty
-	foldMap f (RamaM x y) = f x `mappend` foldMap f y
-	foldMap f (RamaB k l r) = foldMap f l `mappend` f k `mappend` foldMap f r
+instance Foldable ArbolMB where 
+    foldMap f Vacio = mempty
+    foldMap f (RamaM x y) = f x `mappend` foldMap f y
+    foldMap f (RamaB k l r) = foldMap f l `mappend` f k `mappend` foldMap f r
 
 -- Definicion por gchi:
 -- instance Foldable ArbolMB where foldMap f Vacio = mempty; foldMap f (RamaM x y) = f x `mappend` foldMap f y; foldMap f (RamaB k l r) = foldMap f l `mappend` f k `mappend` foldMap f r
@@ -119,7 +118,7 @@ fiboIndex n
   | otherwise = Nothing 
     where 
       fib = 1 : 1 : zipWith (+) fib (tail fib)
-		    fibLista = takeWhile (<=n) fib
+      fibLista = takeWhile (<=n) fib
 
 -- Definicion por ghci:
 -- fiboIndex :: Integer -> Maybe Integer; fiboIndex n | n `elem` fibLista = Just $ toInteger $ length fibLista | otherwise = Nothing where fib = 1 : 1 : zipWith (+) fib (tail fib); fibLista = takeWhile (<=n) fib
