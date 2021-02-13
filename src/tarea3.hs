@@ -90,9 +90,26 @@ analizarArbolMB = plegarArbolMB transVacio transRamaM transRamaB
 -- similar a la de plegarArbolMB, ademas de que foldrl toma un solo argumento al igual que plegarArbolMB, 
 -- siendo estos una lista y un arbol, respectivamente.
 
--- i) Enum es el typeclass que incluye esa estructura ya que la definicion dada es la definicion de una lista en haskell, y
--- Enum permite operaciones sobre listas.
--- Falta mas
+-- i) Foldable es el typeclass incluido en el Preludio de Haskell que permite trabajar sobre estructuras de datos que pueden ser plegadas
+
+-- Definicion de la instancia Foldable para el tipo de datos ArbolMB siguiendo la definicion dada en el Preludio de Haskell
+ instance Foldable ArbolMB where 
+ 	foldMap f Vacio = mempty
+	foldMap f (RamaM x y) = f x `mappend` foldMap f y
+	foldMap f (RamaB k l r) = foldMap f l `mappend` f k `mappend` foldMap f r
+
+-- Definicion por gchi:
+-- instance Foldable ArbolMB where foldMap f Vacio = mempty; foldMap f (RamaM x y) = f x `mappend` foldMap f y; foldMap f (RamaB k l r) = foldMap f l `mappend` f k `mappend` foldMap f r
+
+-- Probamos con un ejemplo por ghci:
+
+-- data ArbolMB a = Vacio | RamaM a (ArbolMB a) | RamaB a (ArbolMB a) (ArbolMB a) deriving (Show)
+-- *Usamos la definicion de la instancia*
+-- arbol = RamaM 1 (RamaB 2 (RamaM 3 (Vacio)) Vacio)
+-- foldl (+) 5 arbol
+-- OUTPUT: 11
+
+-- De esta manera, cualquier funcion de fold (foldl, foldr, etc) definida en el Preludio de Haskell puede usarse con el tipo de datos ArbolMB
 
 
 -- Ejercicio 1
