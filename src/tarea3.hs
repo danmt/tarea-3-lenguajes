@@ -64,27 +64,23 @@ analizarArbolMB = plegarArbolMB transVacio transRamaM transRamaB
     transRamaM = \x y -> 
       case y of
         Nothing -> Just (x, x, True)
-        Just (min, max, estaOrdenado) -> 
-          Just (menor min x, mayor max x, x < min && estaOrdenado)
+        Just y' -> Just (obtenerTupla x y')
     transRamaB = \x y z ->
       case (y, z) of
         (Nothing, Nothing) -> Just (x, x, True)
-        (Just (min, max, estaOrdenado), Nothing) -> 
-          Just (menor min x, mayor max x, x <= min && estaOrdenado)
-        (Nothing, (Just (min, max, estaOrdenado))) -> 
-          Just (menor min x, mayor max x, x <= min && estaOrdenado)
-        (Just (min1, max1, estaOrdenado1), Just (min2, max2, estaOrdenado2)) -> 
-          Just (
-            menor min1 (menor min2 x), 
-            mayor max1 (mayor max2 x), 
-            x <= min1 && x <= min2 && estaOrdenado1 && estaOrdenado2
-          )
+        (Just y', Nothing) -> Just (obtenerTupla x y')
+        (Nothing, Just z') -> Just (obtenerTupla x z')
+        (Just y', Just z') -> Just (obtenerTupla x (unirTuplas y' z'))
+    obtenerTupla x (min, max, estaOrdenado) =
+      (menor min x, mayor max x, x <= min && estaOrdenado)
+    unirTuplas (min1, max1, estaOrdenado1) (min2, max2, estaOrdenado2) =
+      (menor min1 min2, mayor max1 max2, estaOrdenado1 && estaOrdenado2)
     menor m1 m2
-      | m1 < m2     = m1
-      | otherwise   = m2
+      | m1 < m2   = m1
+      | otherwise = m2
     mayor m1 m2
-      | m2 > m1     = m2
-      | otherwise   = m1
+      | m2 > m1   = m2
+      | otherwise = m1
 
 -- g) Debe tomar n funciones como argumento, es decir, una funcion por cada constructor
 -- diferente (n). El valor de tipo Gen a que se desea plegar, se puede recibir implicitamente en la
